@@ -179,11 +179,11 @@ const testimonials = [
 ]
 
 const galleryColors = [
-  { img: '/layer-cutting.png', label: 'Layer Cutting' },
-  { img: '/manicure-pedicure.png', label: 'Manicure & Pedicure' },
-  { img: '/spa.png', label: 'Spa Treatments' },
+  { img: '/layer-cutting.jpg', label: 'Layer Cutting' },
+  { img: '/manicure-pedicure.jpg', label: 'Manicure & Pedicure' },
+  { img: '/spa.jpg', label: 'Spa Treatments' },
   { img: '/main.JPG', label: 'Our Sanctuary' },
-  { img: '/brow-lash.png', label: 'Brow & Lash' },
+  { img: '/brow-lash.jpg', label: 'Brow & Lash' },
 ]
 
 const marqueeItems = [
