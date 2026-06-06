@@ -404,9 +404,19 @@ function Hero({ onBook }) {
             <div className="hero-content">
               <span className="hero-label">Welcome to Olivia Beauty Salon</span>
               <h1 className="hero-heading">
-                Discover the Art of<br />
-                <em>Timeless Beauty</em>
+                OLIVIA BEAUTY SALOON
               </h1>
+              <h2 style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize: 'clamp(20px, 3vw, 32px)',
+                fontStyle: 'italic',
+                fontWeight: 300,
+                color: 'var(--gold-dark)',
+                marginBottom: '24px',
+                lineHeight: 1.3
+              }}>
+                Discover the Art of Timeless Beauty
+              </h2>
               <p className="hero-sub">
                 A sanctuary of elegance where expert artistry meets pure luxury. We craft bespoke beauty experiences tailored to reveal your most radiant self.
               </p>
