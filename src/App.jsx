@@ -773,13 +773,41 @@ function Footer({ onBook }) {
             <div className="footer-col-title">Contact Us</div>
             <div>
               {[
-                { icon: <Icon.MapPin />, text: 'QF9Q+5WW, SH15, Kaduthuruthy, Kerala 686604' },
+                { 
+                  icon: <Icon.MapPin />, 
+                  text: 'Kaduthuruthy, Kottayam', 
+                  link: 'https://maps.app.goo.gl/7N1uKAydXmdC39yp7' 
+                },
                 { icon: <Icon.Phone />, text: '+91 97470 95076' },
                 { icon: <Icon.Mail />, text: '[EMAIL_ADDRESS]' },
               ].map((c, i) => (
                 <div key={i} className="footer-contact-item">
-                  <span className="footer-contact-icon">{c.icon}</span>
-                  <span className="footer-contact-text" style={{ whiteSpace: 'pre-line' }}>{c.text}</span>
+                  {c.link ? (
+                    <a 
+                      href={c.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="footer-contact-icon"
+                      style={{ display: 'inline-flex', cursor: 'pointer' }}
+                    >
+                      {c.icon}
+                    </a>
+                  ) : (
+                    <span className="footer-contact-icon">{c.icon}</span>
+                  )}
+                  {c.link ? (
+                    <a 
+                      href={c.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="footer-contact-text"
+                      style={{ textDecoration: 'none', cursor: 'pointer' }}
+                    >
+                      {c.text}
+                    </a>
+                  ) : (
+                    <span className="footer-contact-text" style={{ whiteSpace: 'pre-line' }}>{c.text}</span>
+                  )}
                 </div>
               ))}
             </div>
