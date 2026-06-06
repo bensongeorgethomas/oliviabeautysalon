@@ -779,7 +779,7 @@ function Footer({ onBook }) {
                   link: 'https://maps.app.goo.gl/7N1uKAydXmdC39yp7' 
                 },
                 { icon: <Icon.Phone />, text: '+91 97470 95076' },
-                { icon: <Icon.Mail />, text: '[EMAIL_ADDRESS]' },
+                { icon: <Icon.Mail />, text: 'shanijohn455@gmail.com' },
               ].map((c, i) => (
                 <div key={i} className="footer-contact-item">
                   {c.link ? (
