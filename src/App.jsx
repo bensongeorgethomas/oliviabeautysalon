@@ -280,16 +280,23 @@ function CustomCursor() {
 /* ─────────────────────────────────────────────
    PRELOADER
    ───────────────────────────────────────────── */
-function Preloader({ onComplete }) {
+function Preloader({ onComplete, videoReady }) {
   const [fadeOut, setFadeOut] = useState(false)
+  const [minTimePassed, setMinTimePassed] = useState(false)
 
+  // Minimum animation time (2s for the ring + brand to play)
   useEffect(() => {
-    const t = setTimeout(() => {
+    const t = setTimeout(() => setMinTimePassed(true), 2000)
+    return () => clearTimeout(t)
+  }, [])
+
+  // Dismiss when BOTH minimum time has passed AND video is ready
+  useEffect(() => {
+    if (minTimePassed && videoReady && !fadeOut) {
       setFadeOut(true)
       setTimeout(onComplete, 800)
-    }, 1000)
-    return () => clearTimeout(t)
-  }, [onComplete])
+    }
+  }, [minTimePassed, videoReady, fadeOut, onComplete])
 
   return (
     <div className={`preloader ${fadeOut ? 'fade-out' : ''}`} role="status" aria-label="Loading Olivia Beauty Salon">
@@ -382,35 +389,35 @@ function Header({ onBook }) {
 /* ─────────────────────────────────────────────
    HERO
    ───────────────────────────────────────────── */
-function Hero({ onBook }) {
-  const [bgLoaded, setBgLoaded] = useState(false)
+function Hero({ onBook, onVideoReady }) {
   const videoRef = useRef(null)
 
-  useEffect(() => {
-    const img = new Image()
-    img.src = '/hero_salon.jpg'
-    img.onload = () => setTimeout(() => setBgLoaded(true), 100)
-  }, [])
-
-  // Auto-play trigger for mobile (plays on touch or scroll if autoplay is blocked)
+  // Notify parent when video can play
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    const playVideo = () => {
-      video.play().catch(err => {
-        console.log("Autoplay was prevented, waiting for interaction:", err)
-      })
+    const handleCanPlay = () => {
+      video.play().catch(() => {})
+      if (onVideoReady) onVideoReady()
     }
 
-    // Attempt play immediately
-    playVideo()
+    // If video is already ready (cached)
+    if (video.readyState >= 3) {
+      handleCanPlay()
+    } else {
+      video.addEventListener('canplay', handleCanPlay, { once: true })
+    }
 
-    // Add listeners for interaction
+    // Fallback: if video takes too long (e.g. slow network), dismiss after 6s
+    const fallbackTimer = setTimeout(() => {
+      if (onVideoReady) onVideoReady()
+    }, 6000)
+
+    // Mobile interaction listeners to force play
     const handleInteraction = () => {
       video.play()
         .then(() => {
-          // Remove listeners once successfully playing
           window.removeEventListener('touchstart', handleInteraction)
           window.removeEventListener('scroll', handleInteraction)
           window.removeEventListener('click', handleInteraction)
@@ -423,11 +430,13 @@ function Hero({ onBook }) {
     window.addEventListener('click', handleInteraction, { passive: true })
 
     return () => {
+      clearTimeout(fallbackTimer)
+      video.removeEventListener('canplay', handleCanPlay)
       window.removeEventListener('touchstart', handleInteraction)
       window.removeEventListener('scroll', handleInteraction)
       window.removeEventListener('click', handleInteraction)
     }
-  }, [])
+  }, [onVideoReady])
 
   return (
     <section className="hero" id="home">
@@ -1097,8 +1106,10 @@ function BookingModal({ onClose }) {
    ───────────────────────────────────────────── */
 export default function App() {
   const [loading, setLoading] = useState(true)
+  const [videoReady, setVideoReady] = useState(false)
 
   const handlePreloaderDone = () => setLoading(false)
+  const handleVideoReady = () => setVideoReady(true)
 
   // WhatsApp booking redirect — opens in a new tab with noopener noreferrer
   const openWhatsApp = () => {
@@ -1118,12 +1129,13 @@ export default function App() {
   return (
     <>
       <CustomCursor />
-      {loading && <Preloader onComplete={handlePreloaderDone} />}
+      {loading && <Preloader onComplete={handlePreloaderDone} videoReady={videoReady} />}
 
+      {/* Hero renders immediately (behind preloader) so video can buffer */}
       <div style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.6s ease' }}>
         <Header onBook={openWhatsApp} />
         <main>
-          <Hero onBook={openWhatsApp} />
+          <Hero onBook={openWhatsApp} onVideoReady={handleVideoReady} />
           <MarqueeStrip />
           <Services onBook={openWhatsApp} />
           <About />
