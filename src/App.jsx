@@ -299,7 +299,7 @@ function Preloader({ onComplete }) {
           <circle className="preloader-ring-bg" cx="50" cy="50" r="46" />
           <circle className="preloader-ring-circle" cx="50" cy="50" r="46" />
         </svg>
-        <img src="/olivia.png" alt="Olivia Beauty Salon" className="preloader-logo" />
+        <img src="/olivia.jpg" alt="Olivia Beauty Salon" className="preloader-logo" />
       </div>
       <div className="preloader-brand">
         <h1>OLIVIA</h1>
@@ -336,7 +336,7 @@ function Header({ onBook }) {
     <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
       <div className="container header-inner">
         <a href="#" className="header-logo" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
-          <img src="/olivia.png" alt="Olivia Beauty Salon Logo" />
+          <img src="/olivia.jpg" alt="Olivia Beauty Salon Logo" />
           <div className="header-logo-text">
             <span>Olivia</span>
             <span>Beauty Salon</span>
@@ -388,13 +388,13 @@ function Hero({ onBook }) {
 
   useEffect(() => {
     const img = new Image()
-    img.src = '/hero_salon.png'
+    img.src = '/hero_salon.jpg'
     img.onload = () => setTimeout(() => setBgLoaded(true), 100)
   }, [])
 
   return (
     <section className="hero" id="home">
-      <video autoPlay muted loop playsInline poster="/hero_salon.png" className="hero-video">
+      <video autoPlay muted loop playsInline poster="/hero_salon.jpg" className="hero-video">
         <source src="/home.mp4" type="video/mp4" />
       </video>
       <div className="hero-overlay"></div>
@@ -731,7 +731,7 @@ function Footer({ onBook }) {
         <div className="footer-grid">
           {/* Brand Col */}
           <div className="footer-brand">
-            <img src="/olivia.png" alt="Olivia Beauty Salon" />
+            <img src="/olivia.jpg" alt="Olivia Beauty Salon" />
             <div className="footer-brand-name">Olivia</div>
             <div className="footer-brand-tagline">Beauty Salon</div>
             <p className="footer-brand-desc">
@@ -899,7 +899,7 @@ function BookingModal({ onClose }) {
         {!success ? (
           <>
             <div className="modal-header">
-              <img src="/olivia.png" alt="" style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', margin: '0 auto 16px' }} />
+              <img src="/olivia.jpg" alt="" style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', margin: '0 auto 16px' }} />
               <h2 className="modal-title" id="modal-heading">Book an Appointment</h2>
               <p className="modal-sub">Reserve your luxurious experience at Olivia Beauty Salon</p>
               <div className="olive-divider" style={{ marginTop: '20px', marginBottom: '0' }}>
