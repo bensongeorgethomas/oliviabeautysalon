@@ -287,7 +287,7 @@ function Preloader({ onComplete }) {
     const t = setTimeout(() => {
       setFadeOut(true)
       setTimeout(onComplete, 800)
-    }, 2600)
+    }, 1000)
     return () => clearTimeout(t)
   }, [onComplete])
 
@@ -384,6 +384,7 @@ function Header({ onBook }) {
    ───────────────────────────────────────────── */
 function Hero({ onBook }) {
   const [bgLoaded, setBgLoaded] = useState(false)
+  const videoRef = useRef(null)
 
   useEffect(() => {
     const img = new Image()
@@ -391,9 +392,46 @@ function Hero({ onBook }) {
     img.onload = () => setTimeout(() => setBgLoaded(true), 100)
   }, [])
 
+  // Auto-play trigger for mobile (plays on touch or scroll if autoplay is blocked)
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const playVideo = () => {
+      video.play().catch(err => {
+        console.log("Autoplay was prevented, waiting for interaction:", err)
+      })
+    }
+
+    // Attempt play immediately
+    playVideo()
+
+    // Add listeners for interaction
+    const handleInteraction = () => {
+      video.play()
+        .then(() => {
+          // Remove listeners once successfully playing
+          window.removeEventListener('touchstart', handleInteraction)
+          window.removeEventListener('scroll', handleInteraction)
+          window.removeEventListener('click', handleInteraction)
+        })
+        .catch(() => {})
+    }
+
+    window.addEventListener('touchstart', handleInteraction, { passive: true })
+    window.addEventListener('scroll', handleInteraction, { passive: true })
+    window.addEventListener('click', handleInteraction, { passive: true })
+
+    return () => {
+      window.removeEventListener('touchstart', handleInteraction)
+      window.removeEventListener('scroll', handleInteraction)
+      window.removeEventListener('click', handleInteraction)
+    }
+  }, [])
+
   return (
     <section className="hero" id="home">
-      <video autoPlay muted loop playsInline poster="/hero_salon.jpg" className="hero-video">
+      <video ref={videoRef} autoPlay muted loop playsInline preload="auto" poster="/hero_salon.jpg" className="hero-video">
         <source src="/home.mp4" type="video/mp4" />
       </video>
       <div className="hero-overlay"></div>
