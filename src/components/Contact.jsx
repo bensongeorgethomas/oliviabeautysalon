@@ -11,7 +11,7 @@ export default function Contact() {
     if (!formData.name.trim()) {
       errors.name = 'Name is required'
     }
-    
+
     if (!formData.email.trim()) {
       errors.email = 'Email is required'
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -42,7 +42,7 @@ export default function Contact() {
     if (!validateForm()) return
 
     setIsSubmitting(true)
-    
+
     // Simulate API request delay
     setTimeout(() => {
       setIsSubmitting(false)
@@ -64,7 +64,7 @@ export default function Contact() {
 
       <div className="contact-grid">
         {/* Contact Info Card - Left */}
-        <div className="contact-info-card animate-fade-in-up">
+        <div className="contact-info-card">
           <h3 className="contact-info-title">Let's discuss your next project</h3>
           <p className="contact-info-desc">
             Have an exciting product idea, website project, or team position? Drop me a message, and let's explore how we can collaborate to make it a reality.
@@ -113,7 +113,7 @@ export default function Contact() {
         </div>
 
         {/* Contact Form Container - Right */}
-        <div className="glass-card contact-form-container animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+        <div className="glass-card contact-form-container">
           {!isSuccess ? (
             <form onSubmit={handleSubmit} noValidate>
               <div className="form-group">
@@ -163,9 +163,9 @@ export default function Contact() {
                 {formErrors.message && <span className="error-message">{formErrors.message}</span>}
               </div>
 
-              <button 
-                type="submit" 
-                className="btn btn-primary" 
+              <button
+                type="submit"
+                className="btn btn-primary"
                 style={{ width: '100%', justifyContent: 'center' }}
                 disabled={isSubmitting}
               >
@@ -174,7 +174,7 @@ export default function Contact() {
                     <svg width="20" height="20" viewBox="0 0 38 38" stroke="#fff" style={{ animation: 'spin 1s linear infinite' }}>
                       <g fill="none" fillRule="evenodd">
                         <g transform="translate(1 1)" strokeWidth="3">
-                          <circle strokeOpacity=".25" cx="18" cy="18" r="18"/>
+                          <circle strokeOpacity=".25" cx="18" cy="18" r="18" />
                           <path d="M36 18c0-9.94-8.06-18-18-18" />
                         </g>
                       </g>

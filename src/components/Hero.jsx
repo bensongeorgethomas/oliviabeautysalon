@@ -26,8 +26,8 @@ export default function Hero() {
 
     const timer = setTimeout(() => {
       setRoleText(
-        isDeleting 
-          ? activeRole.substring(0, charIndex - 1) 
+        isDeleting
+          ? activeRole.substring(0, charIndex - 1)
           : activeRole.substring(0, charIndex + 1)
       )
       setCharIndex((prev) => prev + (isDeleting ? -1 : 1))
@@ -54,9 +54,9 @@ export default function Hero() {
     <section id="home" className="hero-section container">
       <div className="hero-backdrop"></div>
       <div className="hero-backdrop-2"></div>
-      
+
       <div className="hero-grid">
-        <div className="hero-info animate-fade-in-up">
+        <div className="hero-info">
           <div className="hero-badge">
             <span className="logo-dot"></span>
             Available for new opportunities
@@ -70,7 +70,7 @@ export default function Hero() {
           <p className="hero-subtitle">
             Hi, I'm Olivia. I design and code highly polished web experiences, combining clean architecture with gorgeous, modern styling to build applications people love using.
           </p>
-          
+
           <div className="hero-cta">
             <button onClick={() => scrollToSection('projects')} className="btn btn-primary">
               View My Work
@@ -85,7 +85,7 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="hero-visual animate-fade-in">
+        <div className="hero-visual">
           {/* Animated decorative orbit lines */}
           <div className="rotating-orbit">
             <div className="orbit-node"></div>
@@ -116,7 +116,7 @@ export default function Hero() {
       </div>
 
       {/* Metrics Banner */}
-      <div className="stats-bar animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+      <div className="stats-bar">
         <div className="stat-item">
           <h3 className="gradient-text">4+</h3>
           <p>Years Experience</p>

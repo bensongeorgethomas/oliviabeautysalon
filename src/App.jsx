@@ -179,11 +179,11 @@ const testimonials = [
 ]
 
 const galleryColors = [
-  { bg: 'linear-gradient(135deg, #f5e8b4 0%, #d4af37 100%)', label: 'Hair Color' },
-  { bg: 'linear-gradient(135deg, #faf0f3 0%, #e8b4c4 100%)', label: 'Nail Art' },
-  { bg: 'linear-gradient(135deg, #f0f5f0 0%, #b4d4b4 100%)', label: 'Skincare' },
-  { bg: 'linear-gradient(135deg, #f5f0e8 0%, #d4c4a8 100%)', label: 'Spa & Wellness' },
-  { bg: 'linear-gradient(135deg, #f0e8f5 0%, #c4a8d4 100%)', label: 'Brow & Lash' },
+  { img: '/layer-cutting.png', label: 'Layer Cutting' },
+  { img: '/manicure-pedicure.png', label: 'Manicure & Pedicure' },
+  { img: '/spa.png', label: 'Spa Treatments' },
+  { img: '/main.JPG', label: 'Our Sanctuary' },
+  { img: '/brow-lash.png', label: 'Brow & Lash' },
 ]
 
 const marqueeItems = [
@@ -394,6 +394,10 @@ function Hero({ onBook }) {
 
   return (
     <section className="hero" id="home">
+      <video autoPlay muted loop playsInline poster="/hero_salon.png" className="hero-video">
+        <source src="/home.mp4" type="video/mp4" />
+      </video>
+      <div className="hero-overlay"></div>
       <div className="container hero-container">
         <div className="hero-split">
           <div className="hero-split-left">
@@ -423,12 +427,6 @@ function Hero({ onBook }) {
               </div>
             </div>
           </div>
-          <div className="hero-split-right">
-            <div className={`hero-image-mask ${bgLoaded ? 'loaded' : ''}`}>
-              <div className="hero-image-inner" style={{ backgroundImage: "url('/hero_salon.png')" }}></div>
-            </div>
-            <div className="hero-geo" role="presentation"></div>
-          </div>
         </div>
       </div>
 
@@ -440,308 +438,16 @@ function Hero({ onBook }) {
   )
 }
 
-/* ─────────────────────────────────────────────
-   SCROLL ANIMATION (Frame Sequence)
-   ───────────────────────────────────────────── */
-const FRAME_START = 2
-const FRAME_END = 50
-const framePaths = Array.from(
-  { length: FRAME_END - FRAME_START + 1 },
-  (_, index) => `/animation/ezgif-frame-${String(index + FRAME_START).padStart(3, '0')}.jpg`
-)
 
-const visualIndexItems = [
-  {
-    label: '01 / Hair',
-    title: 'Precision styling',
-    copy: 'Sculpted cuts, polish, and soft movement for every appointment.',
-    image: '/hero_salon.png'
-  },
-  {
-    label: '02 / Skin',
-    title: 'Quiet radiance',
-    copy: 'Facials and ritual care shaped around texture, tone, and glow.',
-    image: '/about_salon.png'
-  },
-  {
-    label: '03 / Nails',
-    title: 'Fine detail',
-    copy: 'Minimal, ornate, glossy, or custom: small-scale art with a steady hand.',
-    image: '/olivia.png'
-  },
-  {
-    label: '04 / Bridal',
-    title: 'A composed day',
-    copy: 'Hair, skin, and finishing touches paced for the moments that matter.',
-    image: '/hero_salon.png'
-  }
-]
-
-function ScrollAnimation() {
-  const sectionRef = useRef(null)
-  const trackRef = useRef(null)
-  const progressRef = useRef(null)
-  const canvasRef = useRef(null)
-  const imagesRef = useRef([])
-  const currentFrameRef = useRef(0)
-  const rafRef = useRef(null)
-  const [loaded, setLoaded] = useState(false)
-  const [hintVisible, setHintVisible] = useState(false)
-
-  const drawFrame = (index) => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    const img = imagesRef.current[index]
-    if (!ctx || !img || !img.complete || !img.naturalWidth) return
-
-    const dpr = window.devicePixelRatio || 1
-    const displayWidth = canvas.clientWidth
-    const displayHeight = canvas.clientHeight
-    if (!displayWidth || !displayHeight) return
-
-    const pixelWidth = Math.round(displayWidth * dpr)
-    const pixelHeight = Math.round(displayHeight * dpr)
-    if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
-      canvas.width = pixelWidth
-      canvas.height = pixelHeight
-    }
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0)
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.scale(dpr, dpr)
-    ctx.clearRect(0, 0, displayWidth, displayHeight)
-
-    const scale = Math.min(displayWidth / img.naturalWidth, displayHeight / img.naturalHeight)
-    const drawW = img.naturalWidth * scale
-    const drawH = img.naturalHeight * scale
-    const drawX = (displayWidth - drawW) / 2
-    const drawY = (displayHeight - drawH) / 2
-
-    ctx.drawImage(img, drawX, drawY, drawW, drawH)
-  }
-
-  // Preload all frames
-  useEffect(() => {
-    let loadedCount = 0
-    let cancelled = false
-    const images = framePaths.map((src) => {
-      const img = new Image()
-      img.src = src
-      return img
-    })
-
-    imagesRef.current = images
-
-    const markLoaded = () => {
-      if (cancelled) return
-      loadedCount += 1
-      if (loadedCount === images.length) {
-        setLoaded(true)
-        requestAnimationFrame(() => drawFrame(currentFrameRef.current))
-      }
-    }
-
-    images.forEach((img) => {
-      if (img.complete) {
-        markLoaded()
-        return
-      }
-      img.onload = markLoaded
-      img.onerror = markLoaded
-    })
-
-    return () => {
-      cancelled = true
-      images.forEach((img) => {
-        img.onload = null
-        img.onerror = null
-      })
-    }
-  }, [])
-
-  // Scroll handler
-  useEffect(() => {
-    if (!loaded) return
-
-    const updateFrame = () => {
-      const section = sectionRef.current
-      if (!section) return
-
-      const rect = section.getBoundingClientRect()
-      const sectionHeight = Math.max(section.offsetHeight - window.innerHeight, 1)
-      const scrolled = -rect.top
-
-      const progress = Math.min(Math.max(scrolled / sectionHeight, 0), 1)
-      const frameIndex = Math.min(Math.round(progress * (framePaths.length - 1)), framePaths.length - 1)
-      const shouldShowHint = progress < 0.04
-
-      setHintVisible((visible) => visible === shouldShowHint ? visible : shouldShowHint)
-
-      const track = trackRef.current
-      if (track) {
-        const maxShift = Math.max(track.scrollWidth - window.innerWidth, 0)
-        track.style.transform = `translate3d(${-progress * maxShift}px, 0, 0)`
-      }
-
-      if (progressRef.current) {
-        progressRef.current.style.transform = `scaleX(${progress})`
-      }
-
-      if (frameIndex !== currentFrameRef.current && frameIndex >= 0) {
-        currentFrameRef.current = frameIndex
-        drawFrame(frameIndex)
-      }
-    }
-
-    const onScroll = () => {
-      if (rafRef.current) return
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null
-        updateFrame()
-      })
-    }
-
-    const onResize = () => drawFrame(currentFrameRef.current)
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onResize)
-    updateFrame()
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onResize)
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    }
-  }, [loaded])
-
-  return (
-    <section className="scroll-animation" ref={sectionRef} aria-label="Olivia Beauty Salon visual index">
-      <div className="scroll-animation-sticky">
-        <div className="scroll-animation-brand" aria-hidden="true">
-          <img src="/olivia.png" alt="" />
-          <span>Olivia</span>
-        </div>
-
-        <div className="scroll-animation-marquee" aria-hidden="true">
-          <div>
-            <span>Bookings open</span>
-            <span>Hair styling</span>
-            <span>Skin rituals</span>
-            <span>Nail artistry</span>
-            <span>Bridal beauty</span>
-            <span>Olivia visual index</span>
-          </div>
-        </div>
-
-        <div className="scroll-animation-progress" aria-hidden="true">
-          <span ref={progressRef}></span>
-        </div>
-
-        <div className="scroll-animation-track" ref={trackRef}>
-          <article className="scroll-index-panel scroll-index-panel-intro">
-            <p className="scroll-index-kicker">Visual index</p>
-            <h2>Beauty rituals, moving one frame at a time.</h2>
-            <p>
-              A cinematic pass through Olivia's signature services, paced by your scroll.
-            </p>
-          </article>
-
-          <div className="scroll-index-seal">
-            <div className="scroll-animation-frame">
-              <canvas
-                ref={canvasRef}
-                className="scroll-animation-canvas"
-                aria-label="Olivia Beauty Salon logo animation"
-              />
-            </div>
-          </div>
-
-          {visualIndexItems.map((item, index) => (
-            <article className={`scroll-index-panel panel-${index + 1}`} key={item.title}>
-              <div className="scroll-index-image">
-                <img src={item.image} alt="" />
-              </div>
-              <div className="scroll-index-copy">
-                <span>{item.label}</span>
-                <h3>{item.title}</h3>
-                <p>{item.copy}</p>
-              </div>
-            </article>
-          ))}
-
-          <article className="scroll-index-panel scroll-index-panel-end">
-            <p className="scroll-index-kicker">Next</p>
-            <h2>Reserve your experience.</h2>
-            <p>Continue down to services, treatments, and booking.</p>
-          </article>
-        </div>
-
-        <div className={`scroll-animation-hint ${loaded && hintVisible ? 'visible' : ''}`}>
-          <span>Scroll down to move right</span>
-          <div className="scroll-hint-arrow">
-            <svg width="20" height="28" viewBox="0 0 20 28" fill="none">
-              <path d="M10 2 L10 24 M3 18 L10 25 L17 18" stroke="var(--gold)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 /* ─────────────────────────────────────────────
    MARQUEE
    ───────────────────────────────────────────── */
 function MarqueeStrip() {
-  const trackRef = useRef(null)
-
-  useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-
-    const animations = track.getAnimations()
-    if (!animations.length) return
-    const anim = animations[0]
-
-    let targetRate = 1
-    let currentRate = 1
-    let lastScrollY = window.scrollY
-
-    const onScroll = () => {
-      const currentScrollY = window.scrollY
-      const delta = currentScrollY - lastScrollY
-      lastScrollY = currentScrollY
-
-      // Accelerate based on scroll speed and direction
-      targetRate = 1 + delta * 0.02
-      
-      clearTimeout(window.marqueeTimeout)
-      window.marqueeTimeout = setTimeout(() => {
-        targetRate = 1
-      }, 100)
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-
-    let frame
-    const loop = () => {
-      currentRate += (targetRate - currentRate) * 0.1
-      anim.playbackRate = currentRate
-      frame = requestAnimationFrame(loop)
-    }
-    loop()
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(frame)
-    }
-  }, [])
-
   const quadrupled = [...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems]
   return (
     <div className="marquee-strip" aria-hidden="true">
-      <div className="marquee-track" ref={trackRef}>
+      <div className="marquee-track">
         {quadrupled.map((item, i) => (
           <span key={i} className="marquee-item">
             <Icon.OliveBranch size={16} />
@@ -753,6 +459,7 @@ function MarqueeStrip() {
     </div>
   )
 }
+
 
 /* ─────────────────────────────────────────────
    SERVICES
@@ -796,42 +503,25 @@ function TiltCard({ children, className }) {
 }
 
 function Services({ onBook }) {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'))
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
   return (
-    <section className="services" id="services" ref={ref}>
+    <section className="services" id="services">
       <div className="container">
         <div className="services-header">
-          <span className="section-label reveal">Our Services</span>
-          <h2 className="section-title reveal reveal-delay-1">Curated for <em>Your Radiance</em></h2>
-          <div className="olive-divider reveal reveal-delay-2">
+          <span className="section-label">Our Services</span>
+          <h2 className="section-title">Curated for <em>Your Radiance</em></h2>
+          <div className="olive-divider">
             <div className="olive-divider-line"></div>
             <Icon.OliveBranch />
             <div className="olive-divider-line right"></div>
           </div>
-          <p className="reveal reveal-delay-2" style={{ maxWidth: '520px', margin: '16px auto 0', fontSize: '15px', fontWeight: 300, color: 'var(--charcoal-light)', lineHeight: 1.8 }}>
+          <p style={{ maxWidth: '520px', margin: '16px auto 0', fontSize: '15px', fontWeight: 300, color: 'var(--charcoal-light)', lineHeight: 1.8 }}>
             Each service is a carefully crafted ritual, designed to restore balance and illuminate your natural beauty.
           </p>
         </div>
 
         <div className="services-grid">
           {services.map((s, i) => (
-            <TiltCard key={i} className={`service-card reveal reveal-delay-${Math.min(i + 1, 5)}`}>
+            <TiltCard key={i} className="service-card">
               <div className="service-icon" aria-hidden="true">{s.icon}</div>
               <h3 className="service-name">{s.name}</h3>
               <p className="service-desc">{s.desc}</p>
@@ -841,7 +531,7 @@ function Services({ onBook }) {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '56px' }}>
-          <button className="btn btn-gold reveal" onClick={onBook}>
+          <button className="btn btn-gold" onClick={onBook}>
             Book Your Treatment
             <Icon.ArrowRight />
           </button>
@@ -855,30 +545,13 @@ function Services({ onBook }) {
    ABOUT
    ───────────────────────────────────────────── */
 function About() {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'))
-          }
-        })
-      },
-      { threshold: 0.12 }
-    )
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
   return (
-    <section className="about" id="about" ref={ref}>
+    <section className="about" id="about">
       <div className="container">
         <div className="about-grid">
           {/* Image side */}
-          <div className="about-image-frame reveal">
-            <img src="/about_salon.png" alt="Olivia, founder of Olivia Beauty Salon" />
+          <div className="about-image-frame">
+            <img src="/main.JPG" alt="Olivia, founder of Olivia Beauty Salon" />
             <div className="about-badge">
               <div className="about-badge-number">12+</div>
               <div className="about-badge-text">Years of Excellence</div>
@@ -887,35 +560,27 @@ function About() {
 
           {/* Content side */}
           <div className="about-content">
-            <span className="section-label reveal">Our Story</span>
-            <h2 className="section-title reveal reveal-delay-1">
+            <span className="section-label">Our Story</span>
+            <h2 className="section-title">
               Beauty Rooted in<br /><em>Passion & Artistry</em>
             </h2>
-            <div className="gold-line left reveal reveal-delay-2" style={{ marginBottom: '32px', marginTop: '16px', animation: 'none' }}></div>
+            <div className="gold-line left" style={{ marginBottom: '32px', marginTop: '16px' }}></div>
 
-            <blockquote className="about-quote reveal reveal-delay-2">
-              "True beauty is not about perfection — it is about confidence, care, and the feeling of being absolutely yourself."
+            <blockquote className="about-quote">
+              "True beauty is not about perfection it is about confidence, care, and the feeling of being absolutely yourself."
             </blockquote>
 
-            <p className="about-body reveal reveal-delay-3">
+            <p className="about-body">
               Founded with a vision to create a haven of luxury and refinement, Olivia Beauty Salon has been a trusted destination for discerning clients seeking the very finest in beauty services. We believe that beauty is a deeply personal journey, and our expert team is dedicated to celebrating your unique essence.
             </p>
-            <p className="about-body reveal reveal-delay-3">
-              Every detail of our salon — from the hand-selected botanical products to our highly trained specialists — reflects our unwavering commitment to excellence. Inspired by the olive branch, a timeless symbol of beauty and vitality, we nourish not just your appearance, but your spirit.
+            <p className="about-body">
+              Every detail of our salon from the hand-selected botanical products to our highly trained specialists  reflects our unwavering commitment to excellence. Inspired by the olive branch, a timeless symbol of beauty and vitality, we nourish not just your appearance, but your spirit.
             </p>
 
-            <div className="about-stats reveal reveal-delay-4">
+            <div className="about-stats">
               <div>
-                <div className="about-stat-number">3,200+</div>
+                <div className="about-stat-number">100+</div>
                 <div className="about-stat-label">Happy Clients</div>
-              </div>
-              <div>
-                <div className="about-stat-number">18</div>
-                <div className="about-stat-label">Expert Artists</div>
-              </div>
-              <div>
-                <div className="about-stat-number">40+</div>
-                <div className="about-stat-label">Awards Won</div>
               </div>
             </div>
           </div>
@@ -929,30 +594,13 @@ function About() {
    TESTIMONIALS
    ───────────────────────────────────────────── */
 function Testimonials() {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'))
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
   return (
-    <section className="testimonials" ref={ref}>
+    <section className="testimonials">
       <div className="container">
         <div className="testimonials-header">
-          <span className="section-label reveal">Testimonials</span>
-          <h2 className="section-title reveal reveal-delay-1">Voices of <em>Our Clients</em></h2>
-          <div className="olive-divider reveal reveal-delay-2">
+          <span className="section-label">Testimonials</span>
+          <h2 className="section-title">Voices of <em>Our Clients</em></h2>
+          <div className="olive-divider">
             <div className="olive-divider-line"></div>
             <Icon.OliveBranch />
             <div className="olive-divider-line right"></div>
@@ -961,7 +609,7 @@ function Testimonials() {
 
         <div className="testimonials-grid">
           {testimonials.map((t, i) => (
-            <div key={i} className={`testimonial-card reveal reveal-delay-${i + 1}`}>
+            <div key={i} className="testimonial-card">
               <span className="testimonial-quote-mark">"</span>
               <div className="testimonial-stars">
                 {[...Array(5)].map((_, si) => <span key={si} className="star" aria-hidden="true">★</span>)}
@@ -986,48 +634,36 @@ function Testimonials() {
    GALLERY
    ───────────────────────────────────────────── */
 function Gallery() {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'))
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
   return (
-    <section className="gallery-strip" id="gallery" ref={ref}>
+    <section className="gallery-strip" id="gallery">
       <div className="container">
         <div className="gallery-header">
-          <span className="section-label reveal">Our Work</span>
-          <h2 className="section-title reveal reveal-delay-1">A Glimpse of <em>Elegance</em></h2>
-          <div className="olive-divider reveal reveal-delay-2">
+          <span className="section-label">Our Work</span>
+          <h2 className="section-title">A Glimpse of <em>Elegance</em></h2>
+          <div className="olive-divider">
             <div className="olive-divider-line"></div>
             <Icon.OliveBranch />
             <div className="olive-divider-line right"></div>
           </div>
         </div>
 
-        <div className="gallery-grid reveal reveal-delay-2">
+        <div className="gallery-grid">
           {galleryColors.map((g, i) => (
             <div key={i} className="gallery-item">
-              <div className="gallery-item-inner" style={{ background: g.bg }}>
+              <div
+                className="gallery-item-inner"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.45)), url('${g.img}')`
+                }}
+              >
                 <div style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: '22px',
+                  fontSize: '24px',
                   fontStyle: 'italic',
-                  color: 'rgba(44,44,44,0.6)',
+                  color: 'var(--white)',
                   textAlign: 'center',
                   padding: '20px',
-                  textShadow: '0 1px 3px rgba(255,255,255,0.4)'
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.7)'
                 }}>
                   {g.label}
                 </div>
@@ -1047,38 +683,21 @@ function Gallery() {
    BOOKING BANNER
    ───────────────────────────────────────────── */
 function BookingBanner({ onBook }) {
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('revealed'))
-          }
-        })
-      },
-      { threshold: 0.15 }
-    )
-    if (ref.current) obs.observe(ref.current)
-    return () => obs.disconnect()
-  }, [])
-
   return (
-    <section className="booking-banner" ref={ref}>
+    <section className="booking-banner">
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <p className="booking-banner-label reveal">Reserve Your Experience</p>
-        <h2 className="booking-banner-title reveal reveal-delay-1">
+        <p className="booking-banner-label">Reserve Your Experience</p>
+        <h2 className="booking-banner-title">
           Elevate Your Beauty<br />
           <em>Begin Your Journey Today</em>
         </h2>
-        <div className="booking-banner-divider reveal reveal-delay-2">
+        <div className="booking-banner-divider">
           <span className="divider-leaf"><Icon.OliveBranch size={22} /></span>
         </div>
-        <p className="booking-banner-sub reveal reveal-delay-2">
+        <p className="booking-banner-sub">
           Secure your appointment with our expert team. We look forward to welcoming you into our world of refined luxury.
         </p>
-        <button className="btn btn-gold reveal reveal-delay-3" onClick={onBook}>
+        <button className="btn btn-gold" onClick={onBook}>
           Book Your Appointment
           <Icon.ArrowRight />
         </button>
@@ -1144,9 +763,9 @@ function Footer({ onBook }) {
             <div className="footer-col-title">Contact Us</div>
             <div>
               {[
-                { icon: <Icon.MapPin />, text: 'Chakkarakkal, Kannur\nKerala, India' },
-                { icon: <Icon.Phone />, text: '+91 9747095076' },
-                { icon: <Icon.Mail />, text: 'hello@oliviabeauty.com' },
+                { icon: <Icon.MapPin />, text: 'QF9Q+5WW, SH15, Kaduthuruthy, Kerala 686604' },
+                { icon: <Icon.Phone />, text: '+91 97470 95076' },
+                { icon: <Icon.Mail />, text: '[EMAIL_ADDRESS]' },
               ].map((c, i) => (
                 <div key={i} className="footer-contact-item">
                   <span className="footer-contact-icon">{c.icon}</span>
@@ -1272,7 +891,7 @@ function BookingModal({ onClose }) {
                     id="book-email"
                     type="email"
                     className="form-control"
-                    placeholder="your@email.com"
+                    placeholder="shanijohn455@gmail.com"
                     value={form.email}
                     onChange={(e) => onChange('email', e.target.value)}
                     aria-invalid={!!errors.email}
@@ -1403,35 +1022,41 @@ function BookingModal({ onClose }) {
    ───────────────────────────────────────────── */
 export default function App() {
   const [loading, setLoading] = useState(true)
-  const [bookingOpen, setBookingOpen] = useState(false)
 
   const handlePreloaderDone = () => setLoading(false)
 
-  // Prevent background scroll when modal is open
+  // WhatsApp booking redirect — opens in a new tab with noopener noreferrer
+  const openWhatsApp = () => {
+    window.open(
+      'https://wa.me/91XXXXXXXXXX?text=Hi%20Olivia%20Beauty%20Salon,%20I%20would%20like%20to%20check%20availability%20for%20an%20appointment.',
+      '_blank',
+      'noopener,noreferrer'
+    )
+  }
+
+  // Prevent background scroll when preloader is active
   useEffect(() => {
-    document.body.style.overflow = (loading || bookingOpen) ? 'hidden' : ''
+    document.body.style.overflow = loading ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
-  }, [loading, bookingOpen])
+  }, [loading])
 
   return (
     <>
       <CustomCursor />
       {loading && <Preloader onComplete={handlePreloaderDone} />}
-      {bookingOpen && <BookingModal onClose={() => setBookingOpen(false)} />}
 
       <div style={{ opacity: loading ? 0 : 1, transition: 'opacity 0.6s ease' }}>
-        <Header onBook={() => setBookingOpen(true)} />
+        <Header onBook={openWhatsApp} />
         <main>
-          <Hero onBook={() => setBookingOpen(true)} />
-          <ScrollAnimation />
+          <Hero onBook={openWhatsApp} />
           <MarqueeStrip />
-          <Services onBook={() => setBookingOpen(true)} />
+          <Services onBook={openWhatsApp} />
           <About />
           <Testimonials />
           <Gallery />
-          <BookingBanner onBook={() => setBookingOpen(true)} />
+          <BookingBanner onBook={openWhatsApp} />
         </main>
-        <Footer onBook={() => setBookingOpen(true)} />
+        <Footer onBook={openWhatsApp} />
       </div>
     </>
   )

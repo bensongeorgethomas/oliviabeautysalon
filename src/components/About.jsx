@@ -79,7 +79,7 @@ export default function About() {
 
         <div className="about-grid">
           {/* Bio and Skills Column */}
-          <div className="about-details animate-fade-in-up">
+          <div className="about-details">
             <h3 style={{ fontSize: '24px', marginBottom: '16px', color: 'var(--heading-color)' }}>
               Engineering Beauty & Functionality
             </h3>
@@ -99,8 +99,8 @@ export default function About() {
                     <span className="skill-percent">{skill.level}%</span>
                   </div>
                   <div className="skill-track">
-                    <div 
-                      className="skill-fill" 
+                    <div
+                      className="skill-fill"
                       style={{ width: skillsLoaded ? `${skill.level}%` : '0%' }}
                     ></div>
                   </div>
@@ -118,7 +118,7 @@ export default function About() {
               </svg>
               Interactive Console
             </h3>
-            
+
             <div className="terminal-window">
               <div className="terminal-header">
                 <div className="terminal-buttons">
@@ -129,7 +129,7 @@ export default function About() {
                 <div className="terminal-title">guest@oliviachen.dev:~</div>
                 <div style={{ width: '48px' }}></div> {/* Spacer */}
               </div>
-              
+
               <div className="terminal-body" ref={terminalBodyRef}>
                 {terminalHistory.map((line, index) => (
                   <div key={index} className="terminal-line">
@@ -149,7 +149,7 @@ export default function About() {
                     )}
                   </div>
                 ))}
-                
+
                 <form onSubmit={handleTerminalSubmit} className="terminal-input-row">
                   <span className="terminal-prompt">guest@olivia:~$</span>
                   <input

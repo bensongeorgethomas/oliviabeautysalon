@@ -96,7 +96,7 @@ export default function Projects() {
         {filteredProjects.map((project) => (
           <div
             key={project.id}
-            className="glass-card project-card animate-fade-in-up"
+            className="glass-card project-card"
             onClick={() => openProject(project)}
             role="button"
             tabIndex="0"
