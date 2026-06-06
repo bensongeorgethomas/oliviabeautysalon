@@ -411,7 +411,7 @@ function Hero({ onBook }) {
                 fontSize: 'clamp(20px, 3vw, 32px)',
                 fontStyle: 'italic',
                 fontWeight: 300,
-                color: 'var(--gold-dark)',
+                color: 'var(--gold-light)',
                 marginBottom: '24px',
                 lineHeight: 1.3
               }}>
