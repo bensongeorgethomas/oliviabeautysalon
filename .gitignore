@@ -33,3 +33,10 @@ dist-ssr
 /manicure and pedicure.png
 /spa.png
 
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
