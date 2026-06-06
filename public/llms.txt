@@ -1,0 +1,31 @@
+# Olivia Beauty Salon
+
+> A sanctuary of refined elegance where expert artistry meets pure luxury. Rooted in the timeless beauty of the olive branch.
+
+## Contact Information
+- **Location**: QF9Q+5WW, SH15, Kaduthuruthy, Kerala 686604
+- **Phone**: +91 97470 95076
+- **Email**: shanijohn455@gmail.com
+- **Website**: https://oliviabeautysaloon.qzz.io
+
+## Opening Hours
+- **Monday – Friday**: 9:00 am – 8:00 pm
+- **Saturday**: 9:00 am – 7:00 pm
+- **Sunday**: 10:00 am – 6:00 pm
+
+## Services
+All services are tailored bespoke beauty experiences.
+
+- **Hair Styling** (From $85): Precision cuts, bespoke color treatments, and custom styles.
+- **Nail Artistry** (From $45): Gel, acrylic, or natural nail care with stunning artisan designs.
+- **Skincare & Facials** (From $120): Curated facial treatments using luxury botanical ingredients.
+- **Spa Treatments** (From $150): Full-body massages, aromatherapy wraps, and rejuvenating body treatments.
+- **Brow & Lash** (From $55): Perfectly arched brows, lash lifts, and tinting services.
+- **Bridal Packages** (From $350): Luxurious bespoke packages for brides and wedding parties.
+
+## Key Links
+- [Home](https://oliviabeautysaloon.qzz.io#home)
+- [Services](https://oliviabeautysaloon.qzz.io#services)
+- [About Us](https://oliviabeautysaloon.qzz.io#about)
+- [Gallery](https://oliviabeautysaloon.qzz.io#gallery)
+- [Contact](https://oliviabeautysaloon.qzz.io#contact)
