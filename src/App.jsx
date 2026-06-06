@@ -123,37 +123,36 @@ const services = [
     icon: <Icon.Scissors />,
     name: 'Hair Styling',
     desc: 'From precision cuts to bespoke color treatments, our expert stylists craft looks that perfectly frame your features.',
-    price: 'From $85'
   },
   {
     icon: <Icon.Hand />,
     name: 'Nail Artistry',
     desc: 'Gel, acrylic, or natural — indulge in meticulous nail care with premium products and stunning artisan designs.',
-    price: 'From $45'
+    
   },
   {
     icon: <Icon.Sparkles />,
     name: 'Skincare & Facials',
     desc: 'Revitalise your skin with our curated facial treatments using luxury botanical ingredients and advanced techniques.',
-    price: 'From $120'
+    
   },
   {
     icon: <Icon.Drop />,
     name: 'Spa Treatments',
     desc: 'Escape into tranquility with full-body massages, aromatherapy wraps, and rejuvenating body treatments.',
-    price: 'From $150'
+   
   },
   {
     icon: <Icon.Eye />,
     name: 'Brow & Lash',
     desc: 'Perfectly arched brows, lash lifts, and tinting services to open up and define your eyes with elegance.',
-    price: 'From $55'
+   
   },
   {
     icon: <Icon.Leaf />,
     name: 'Bridal Packages',
     desc: 'Your most beautiful day deserves the finest touch. Luxurious bespoke packages for brides and their wedding parties.',
-    price: 'From $350'
+   
   }
 ]
 
@@ -535,7 +534,7 @@ function Services({ onBook }) {
               <div className="service-icon" aria-hidden="true">{s.icon}</div>
               <h3 className="service-name">{s.name}</h3>
               <p className="service-desc">{s.desc}</p>
-              <span className="service-price">{s.price}</span>
+              {s.price && <span className="service-price">{s.price}</span>}
             </TiltCard>
           ))}
         </div>

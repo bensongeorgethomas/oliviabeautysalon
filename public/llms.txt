@@ -16,12 +16,12 @@
 ## Services
 All services are tailored bespoke beauty experiences.
 
-- **Hair Styling** (From $85): Precision cuts, bespoke color treatments, and custom styles.
-- **Nail Artistry** (From $45): Gel, acrylic, or natural nail care with stunning artisan designs.
-- **Skincare & Facials** (From $120): Curated facial treatments using luxury botanical ingredients.
-- **Spa Treatments** (From $150): Full-body massages, aromatherapy wraps, and rejuvenating body treatments.
-- **Brow & Lash** (From $55): Perfectly arched brows, lash lifts, and tinting services.
-- **Bridal Packages** (From $350): Luxurious bespoke packages for brides and wedding parties.
+- **Hair Styling**: Precision cuts, bespoke color treatments, and custom styles.
+- **Nail Artistry**: Gel, acrylic, or natural nail care with stunning artisan designs.
+- **Skincare & Facials**: Curated facial treatments using luxury botanical ingredients.
+- **Spa Treatments**: Full-body massages, aromatherapy wraps, and rejuvenating body treatments.
+- **Brow & Lash**: Perfectly arched brows, lash lifts, and tinting services.
+- **Bridal Packages**: Luxurious bespoke packages for brides and wedding parties.
 
 ## Key Links
 - [Home](https://oliviabeautysaloon.qzz.io#home)
