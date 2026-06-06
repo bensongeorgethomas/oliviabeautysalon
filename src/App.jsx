@@ -404,7 +404,7 @@ function Hero({ onBook }) {
             <div className="hero-content">
               <span className="hero-label">Welcome to Olivia Beauty Salon</span>
               <h1 className="hero-heading">
-                OLIVIA BEAUTY SALOON
+                OLIVIA BEAUTY SALON
               </h1>
               <h2 style={{
                 fontFamily: 'var(--font-serif)',
