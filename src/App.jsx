@@ -864,9 +864,8 @@ function Footer({ onBook }) {
             <div className="footer-col-title">Opening Hours</div>
             <div className="footer-hours">
               {[
-                { day: 'Monday – Friday', time: '9:00 am – 8:00 pm' },
-                { day: 'Saturday', time: '9:00 am – 7:00 pm' },
-                { day: 'Sunday', time: '10:00 am – 6:00 pm' },
+                { day: 'Monday – Friday', time: '9:00 am – 6:00 pm' },
+                { day: 'Saturday', time: '9:00 am – 6:00 pm' },
               ].map((h, i) => (
                 <div key={i} className="hours-row">
                   <span className="hours-day">{h.day}</span>
