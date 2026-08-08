@@ -1,5 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
+import { trackEvent } from './analytics'
+
+const WHATSAPP_BOOKING_URL = 'https://wa.me/91XXXXXXXXXX?text=Hi%20Olivia%20Beauty%20Salon,%20I%20would%20like%20to%20check%20availability%20for%20an%20appointment.'
+
+const trackNavigationClick = (section, navigationLocation) => {
+  trackEvent('navigation_click', {
+    section,
+    navigation_location: navigationLocation,
+  })
+}
 
 /* ─────────────────────────────────────────────
    SVG Icon Helpers
@@ -329,8 +339,9 @@ function Header({ onBook }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const scrollTo = (id) => {
+  const scrollTo = (id, navigationLocation = 'header') => {
     setMobileOpen(false)
+    trackNavigationClick(id, navigationLocation)
     const el = document.getElementById(id)
     if (el) {
       const offset = el.getBoundingClientRect().top + window.pageYOffset - 90
@@ -341,7 +352,7 @@ function Header({ onBook }) {
   return (
     <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
       <div className="container header-inner">
-        <a href="#" className="header-logo" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
+        <a href="#" className="header-logo" onClick={(e) => { e.preventDefault(); trackNavigationClick('home', 'header_logo'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}>
           <img src="/olivia.jpg" alt="Olivia Beauty Salon Logo" />
           <div className="header-logo-text">
             <span>Olivia</span>
@@ -351,11 +362,11 @@ function Header({ onBook }) {
 
         <nav className="site-nav">
           {['services', 'about', 'gallery', 'contact'].map((s) => (
-            <button key={s} className="nav-link" onClick={() => scrollTo(s)} style={{ background: 'none', border: 'none' }}>
+            <button key={s} className="nav-link" onClick={() => scrollTo(s, 'header_desktop')} style={{ background: 'none', border: 'none' }}>
               {s.charAt(0).toUpperCase() + s.slice(1)}
             </button>
           ))}
-          <button className="btn btn-gold btn-book" onClick={onBook}>
+          <button className="btn btn-gold btn-book" onClick={() => onBook('header_desktop_book')}>
             Book Appointment
           </button>
         </nav>
@@ -373,11 +384,11 @@ function Header({ onBook }) {
       {mobileOpen && (
         <div className="mobile-nav open">
           {['services', 'about', 'gallery', 'contact'].map((s) => (
-            <button key={s} className="nav-link" onClick={() => scrollTo(s)} style={{ background: 'none', border: 'none' }}>
+            <button key={s} className="nav-link" onClick={() => scrollTo(s, 'header_mobile')} style={{ background: 'none', border: 'none' }}>
               {s.charAt(0).toUpperCase() + s.slice(1)}
             </button>
           ))}
-          <button className="btn btn-gold" onClick={() => { setMobileOpen(false); onBook() }}>
+          <button className="btn btn-gold" onClick={() => { setMobileOpen(false); onBook('header_mobile_book') }}>
             Book Appointment
           </button>
         </div>
@@ -467,13 +478,14 @@ function Hero({ onBook, onVideoReady }) {
                 A sanctuary of elegance where expert artistry meets pure luxury. We craft bespoke beauty experiences tailored to reveal your most radiant self.
               </p>
               <div className="hero-cta">
-                <button className="btn btn-gold" onClick={onBook}>
+                <button className="btn btn-gold" onClick={() => onBook('hero_book_button')}>
                   Book an Appointment
                   <Icon.ArrowRight />
                 </button>
                 <button
                   className="btn btn-outline"
                   onClick={() => {
+                    trackNavigationClick('services', 'hero_explore_services')
                     const el = document.getElementById('services')
                     if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 90, behavior: 'smooth' })
                   }}
@@ -587,7 +599,7 @@ function Services({ onBook }) {
         </div>
 
         <div style={{ textAlign: 'center', marginTop: '56px' }}>
-          <button className="btn btn-gold" onClick={onBook}>
+          <button className="btn btn-gold" onClick={() => onBook('services_book_treatment')}>
             Book Your Treatment
             <Icon.ArrowRight />
           </button>
@@ -753,7 +765,7 @@ function BookingBanner({ onBook }) {
         <p className="booking-banner-sub">
           Secure your appointment with our expert team. We look forward to welcoming you into our world of refined luxury.
         </p>
-        <button className="btn btn-gold" onClick={onBook}>
+        <button className="btn btn-gold" onClick={() => onBook('booking_banner')}>
           Book Your Appointment
           <Icon.ArrowRight />
         </button>
@@ -767,6 +779,7 @@ function BookingBanner({ onBook }) {
    ───────────────────────────────────────────── */
 function Footer({ onBook }) {
   const scrollTo = (id) => {
+    trackNavigationClick(id, 'footer_navigation')
     const el = document.getElementById(id)
     if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 90, behavior: 'smooth' })
   }
@@ -834,6 +847,7 @@ function Footer({ onBook }) {
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="footer-contact-icon"
+                      onClick={() => trackEvent('location_click', { contact_location: 'footer_contact', destination: 'google_maps' })}
                       style={{ display: 'inline-flex', cursor: 'pointer' }}
                     >
                       {c.icon}
@@ -847,6 +861,7 @@ function Footer({ onBook }) {
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="footer-contact-text"
+                      onClick={() => trackEvent('location_click', { contact_location: 'footer_contact', destination: 'google_maps' })}
                       style={{ textDecoration: 'none', cursor: 'pointer' }}
                     >
                       {c.text}
@@ -874,7 +889,7 @@ function Footer({ onBook }) {
               ))}
             </div>
             <div style={{ marginTop: '28px' }}>
-              <button className="btn btn-gold" onClick={onBook} style={{ width: '100%', justifyContent: 'center', padding: '12px 20px', fontSize: '11px' }}>
+              <button className="btn btn-gold" onClick={() => onBook('footer_book_now')} style={{ width: '100%', justifyContent: 'center', padding: '12px 20px', fontSize: '11px' }}>
                 Book Now
               </button>
             </div>
@@ -923,6 +938,12 @@ function BookingModal({ onClose }) {
   const onSubmit = (e) => {
     e.preventDefault()
     if (!validate()) return
+    trackEvent('contact_form_submit', {
+      form_name: 'booking_modal',
+      service: form.service,
+      has_phone: Boolean(form.phone.trim()),
+      preferred_time_selected: Boolean(form.time),
+    })
     setSubmitting(true)
     setTimeout(() => { setSubmitting(false); setSuccess(true) }, 1800)
   }
@@ -1111,12 +1132,16 @@ export default function App() {
   const handleVideoReady = () => setVideoReady(true)
 
   // WhatsApp booking redirect — opens in a new tab with noopener noreferrer
-  const openWhatsApp = () => {
-    window.open(
-      'https://wa.me/91XXXXXXXXXX?text=Hi%20Olivia%20Beauty%20Salon,%20I%20would%20like%20to%20check%20availability%20for%20an%20appointment.',
-      '_blank',
-      'noopener,noreferrer'
-    )
+  const openWhatsApp = (buttonLocation = 'unknown') => {
+    trackEvent('appointment_click', {
+      button_location: buttonLocation,
+      contact_method: 'whatsapp',
+    })
+    trackEvent('whatsapp_click', {
+      button_location: buttonLocation,
+      contact_method: 'whatsapp',
+    })
+    window.open(WHATSAPP_BOOKING_URL, '_blank', 'noopener,noreferrer')
   }
 
   // Prevent background scroll when preloader is active
